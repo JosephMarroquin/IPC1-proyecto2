@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Carga pacientes</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css'>
+<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.13/css/all.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="page-wrapper chiller-theme toggled">
+  <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+    <i class="fas fa-bars"></i>
+  </a>
+  <nav id="sidebar" class="sidebar-wrapper">
+    <div class="sidebar-content">
+      <div class="sidebar-brand">
+        <a href="index.html">uhospital</a>
+        <div id="close-sidebar">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+      <div class="sidebar-header">
+        <div class="user-pic">
+          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture">
+        </div>
+        <div class="user-info">
+          <span class="user-name"><strong>Javier</strong>
+            <strong>Golon</strong>
+          </span>
+          <span class="user-role">Administrador</span>
+          <span class="user-status">
+            <i class="fa fa-circle"></i>
+            <span>Online</span>
+          </span>
+        </div>
+      </div>
+      <div class="sidebar-menu">
+        <ul>
+          <li class="header-menu">
+            <span>General</span>
+          </li>
+          <li class="sidebar-dropdown">
+            <a href="#">
+              <i class="fa fa-book"></i>
+              <span>Carga de datos</span>
+            </a>
+            <div class="sidebar-submenu">
+              <ul>
+                <li>
+                  <a href="cargar_paciente.html">Cargar Pacientes
+                  </a>
+                </li>
+                <li>
+                  <a href="cargar_doctor.html">Cargar Doctores</a>
+                </li>
+                <li>
+                  <a href="cargar_enfermera.html">Cargar Enfermeras</a>
+                </li>
+                <li>
+                  <a href="cargar_medicamento.html">Cargar Medicamentos</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="sidebar-dropdown">
+            <a href="#">
+              <i class="fa fa-globe"></i>
+              <span>Visualización</span>
+            </a>
+           <div class="sidebar-submenu">
+              <ul>
+                <li>
+                  <a href="visualizar_doctor.html">Doctores</a>
+                </li>
+                <li>
+                  <a href="visualizar_enfermera.html">Enfermeras</a>
+                </li>
+                <li>
+                  <a href="visualizar_paciente.html">Pacientes</a>
+                </li>
+                <li>
+                  <a href="visualizar_medicamento.html">Medicamentos</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="sidebar-dropdown">
+            <a href="#">
+              <i class="fa fa-chart-line"></i>
+              <span>Reportes</span>
+            </a>
+            <div class="sidebar-submenu">
+              <ul>
+                <li>
+                  <a href="#">Top Medicamentos</a>
+                </li>
+                <li>
+                  <a href="#">Top Doctores</a>
+                </li>
+                <li>
+                  <a href="#">Bar chart</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <!-- sidebar-menu  -->
+    </div>
+    <!-- sidebar-content  -->
+    <div class="sidebar-footer">
+      <a href="../login.html">
+        <i class="fa fa-power-off"></i>
+      </a>
+    </div>
+  </nav>
+  <!-- sidebar-wrapper  -->
+  <main class="page-content">
+    <div class="container">
+      <h2><img class="img-responsive img-centered" src="https://scontent-mia3-2.xx.fbcdn.net/v/t1.15752-9/177027217_321751712702224_3147087804184049374_n.png?_nc_cat=102&ccb=1-3&_nc_sid=ae9488&_nc_ohc=deXPROag4bkAX8r9AbH&_nc_ht=scontent-mia3-2.xx&oh=30ebf5559c3a478198a3fddbb610e165&oe=60AA1119" width="200" height="200">
+        Administración - Pacientes</h2>
+      <hr>
+      <div class="form-group col-md-12">
+        <div class="alert alert-success" role="alert">
+          <h4 class="alert-heading">Carga masiva de pacientes</h4>
+          <br>
+          <input type="file" class="btn btn-sm btn-success" id="carga" name="carga" accept=".csv">
+          <button class="btn btn btn-success" onclick="cargar()">Cargar</button>
+        </div>
+
+      </div>
+      <hr>
+
+      <footer class="text-center">
+        <div class="mb-2">
+          <small>
+            © 2021 <i class="fa fa-globe" style="color:rgb(51, 41, 41)"></i> by - 
+              Joseph Marroquin
+            </a>
+          </small>
+        </div>
+
+
+      </footer>
+
+    </div>
+
+  </main>
+  <!-- page-content" -->
+</div>
+<!-- page-wrapper -->
+<!-- partial -->
+<script src='./funcion.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/esm/popper.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>

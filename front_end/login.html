@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Autenticación al sistema </title>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:600'><link rel="stylesheet" href="./styleLogin.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="login-wrap">
+	<div class="login-html">
+		<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Inicio de Sesión</label>
+		<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Registro Paciente</label>
+		<div class="login-form">
+			<div class="sign-in-htm">
+				<div class="group">
+					<label for="user" class="label">Usuario</label>
+					<input id="user" type="text" class="input">
+				</div>
+				<div class="group">
+					<label for="pass" class="label">Contraseña</label>
+					<input id="pass" type="password" class="input" data-type="password">
+				</div>
+				<div class="group">
+					<input type="submit" class="button" value="Iniciar sesión"  onclick="iniciarsesion()">
+				</div>
+				<div class="hr"></div>
+				<div class="foot-lnk">
+					<a href="index.html">Regresar</a>
+				</div>
+			</div>
+			<div class="sign-up-htm">
+				<div class="group">
+					<label for="nombre" class="label">Nombre</label>
+					<input id="nombre" type="text" class="input">
+				</div>
+				<div class="group">
+					<label for="apellido" class="label">Apellido</label>
+					<input id="apellido" type="text" class="input" >
+				</div>
+				<div class="group">
+					<label for="fecha" class="label">Fecha de Nacimiento</label>
+					<input id="fecha" type="date" class="input" >
+				</div>
+				<div class="group">
+					<label for="sexo" class="label">Sexo</label>
+					<select name="" id="sexo" class="input">
+
+						<option value="M">M</option>
+						
+						<option value="F">F</option>
+						
+						</select>
+				</div>
+				<div class="group">
+					<label for="nuser" class="label">Nombre de usuario</label>
+					<input id="nuser" type="text" class="input">
+				</div>
+				<div class="group">
+					<label for="npass" class="label">Contraseña</label>
+					<input id="npass" type="password" class="input" >
+				</div>
+				<div class="group">
+					<label for="telefono" class="label">Telefono</label>
+					<input id="telefono" type="text" class="input" >
+				</div>
+				<div class="group">
+					<input type="submit"  onclick="CrearUsuario()" class="button" value="Registrarse">
+				</div>
+				<div class="hr"></div>
+				<div class="foot-lnk">
+					<a href="index.html">Regresar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- partial -->
+  
+<script>
+	//Agregando validaciones de  cors 
+	let headers = new Headers();
+	headers.append('Content-Type', 'application/json');
+	headers.append('Accept', 'application/json');
+	headers.append('Access-Control-Allow-Origin', 'http://localhost:5050');
+	headers.append('Access-Control-Allow-Credentials', 'true');
+	headers.append('GET', 'POST', 'OPTIONS','PUT','DELETE');
+
+	//login 
+	function iniciarsesion(){
+		let usuario=document.getElementById("user")
+		let password=document.getElementById("pass")
+
+		fetch(`http://localhost:5050/login/${usuario.value}/${password.value}`)
+		.then(response => response.json())
+		.then(data => {
+			console.log(data.nombre)
+			if(data.nombre=="false"){
+
+				fetch(`http://localhost:5050/loginP/${usuario.value}/${password.value}`)
+				.then(response => response.json())
+				.then(data => {
+					console.log(data.nombre)
+					if(data.nombre=="false"){
+						
+						fetch(`http://localhost:5050/loginD/${usuario.value}/${password.value}`)
+						.then(response => response.json())
+						.then(data => {
+							console.log(data.nombre)
+							if(data.nombre=="false"){
+								
+								fetch(`http://localhost:5050/loginE/${usuario.value}/${password.value}`)
+								.then(response => response.json())
+								.then(data => {
+									console.log(data.nombre)
+									if(data.nombre=="false"){
+										alert('Credenciales incorrectas')
+									}else{
+										alert(`Bienvenido ${data.nombre}`)
+										window.location.href='../front_end/enfermera/index.html'
+									}
+								})
+								password.value='';
+								usuario.value='';
+
+							}else{
+								alert(`Bienvenido ${data.nombre}`)
+								window.location.href='../front_end/doctor/index.html'
+							}
+						})
+					}else{
+						alert(`Bienvenido ${data.nombre}`)
+						window.location.href='../front_end/paciente/index.html'
+					}
+				})
+				
+			}else{
+				alert(`Bienvenido ${data.nombre}`)
+				window.location.href='../front_end/admin/index.html'
+			}
+		})
+	}
+
+  </script>
+<script src='./script.js'></script>
+</body>
+</html>
