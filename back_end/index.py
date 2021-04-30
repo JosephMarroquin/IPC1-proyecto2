@@ -3,6 +3,8 @@
 from flask import Flask,request,jsonify
 from flask_cors import CORS
 from control import control
+from paciente import Paciente
+import json,re
 
 #Crear la app
 
@@ -13,6 +15,52 @@ CORS(app)
 
 control=control()
 
+paciente=[]
+
+#Registro Paciente
+def crearPaciente(nombre,apellido,fecha,sexo,user,password,telefono):
+    paciente.append(Paciente(nombre,apellido,fecha,sexo,user,password,telefono))
+
+#mostrar datos
+def obtener_paciente():
+    return json.dumps([ob.__dict__ for ob in paciente])
+
+#actualizar datos
+def actualizar_paciente(user,user_nuevo,apellido,fecha,sexo,nombre,password,telefono):
+    for x in paciente:
+        if x.user==user:
+            paciente[paciente.index(x)]=Paciente(nombre,apellido,fecha,sexo,user_nuevo,password,telefono)
+            return True
+    return False 
+
+#elilminar datos
+def eliminar_paciente(user):
+    for x in paciente:
+        if x.user==user:
+            paciente.remove(x)
+            return True
+    return False 
+
+#login
+def iniciar_sesionP(user,password):
+    for x in paciente:
+        if x.password==password and x.user==user:
+            return json.dumps(x.__dict__)
+    return '{"nombre":"false"}' 
+
+#carga masiva
+def cargamasiva(data):
+    hola = re.split('\n',data)
+    i=1
+    while i < len(hola):
+        texto = re.split(',',hola[i])
+        crearPaciente(texto[0],texto[1],texto[2],texto[3],texto[4],texto[5],texto[6])
+        i = i+1 
+
+
+
+
+
 #EndPoints
 
 @app.route('/obtenerusuarios')
@@ -21,7 +69,7 @@ def obtenerusuarios():
 
 @app.route('/obtenerpaciente')
 def obtenerpaciente():
-    return control.obtener_paciente()
+    return obtener_paciente()
 
 @app.route('/obtenerdoctor')
 def obtenerdoctor():
@@ -38,7 +86,7 @@ def obtenermedicamento():
 #Eliminar datos
 @app.route('/paciente/<user>',methods=['DELETE'])
 def eliminarpaciente(user):
-    if(control.eliminar_paciente(user)):
+    if(eliminar_paciente(user)):
         return '{"data":"Eliminado"}'
     return '{"data":"Error"}'
 
@@ -64,7 +112,7 @@ def eliminarmedicamento(nombre):
 @app.route('/paciente/<user>',methods=['PUT'])
 def actualizarpaciente(user):
     dato=request.json
-    if control.actualizar_paciente(user,dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['telefono']):
+    if actualizar_paciente(user,dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['telefono']):
         return '{"data":"Actualizado"}'
     return '{"data":"Error"}'
 
@@ -98,7 +146,7 @@ def login(user,password):
 @app.route('/loginP/<user>/<password>')
 def loginP(user,password):
     print('entra paciente')
-    return control.iniciar_sesionP(user,password)
+    return iniciar_sesionP(user,password)
 
 @app.route('/loginD/<user>/<password>')
 def loginD(user,password):
@@ -113,14 +161,14 @@ def loginE(user,password):
 @app.route('/registro',methods=['POST'])
 def registrar():
     dato=request.json
-    control.crearPaciente(dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['telefono'])
+    crearPaciente(dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['telefono'])
     return '{"data":"Creado"}'
 
 #carga masiva
 @app.route('/carga',methods=['POST'])
 def carga():
     dato = request.json
-    control.cargamasiva(dato['data'])
+    cargamasiva(dato['data'])
     return '{"data":"Cargados"}'
 
 @app.route('/cargaD',methods=['POST'])
@@ -140,6 +188,28 @@ def cargaM():
     dato = request.json
     control.cargamasivaM(dato['data'])
     return '{"data":"Cargados"}'
+
+
+#
+@app.route('/Info', methods=['POST'])
+def ObtenerPersona():
+    global paciente
+    user = request.json['user']
+    for us in paciente:
+        if us.getUser() == user:
+            Dato = {
+                'nombre':us.getNombre(), 
+                'apellido':us.getApellido(), 
+                'fecha':us.getFecha(), 
+                'sexo':us.getSexo(), 
+                'user':us.getUser(),
+                'password':us.getPassword(),
+                'telefono':us.getTelefono()
+                }
+            break
+    respuesta = jsonify(Dato)
+    return(respuesta)    
+    
 
 
 #INICIAR EL SERVIDOR

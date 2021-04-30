@@ -5,20 +5,19 @@ from enfermera import Enfermera
 from medicamento import Medicamento
 import json
 import re
+from flask import Flask,request,jsonify
 
 class control:
     def __init__(self):
         self.usuario=[]
-        self.paciente=[]
+        
         self.doctor=[]
         self.enfermera=[]
         self.medicamento=[]
 
         self.usuario.append(Usuario('Javier','Golon','admin','1234'))
         
-    #Registro Paciente
-    def crearPaciente(self,nombre,apellido,fecha,sexo,user,password,telefono):
-        self.paciente.append(Paciente(nombre,apellido,fecha,sexo,user,password,telefono))
+    
      
     #Crear doctor
     def crearDoctor(self,nombre,apellido,fecha,sexo,user,password,especialidad,telefono):
@@ -33,8 +32,6 @@ class control:
         self.medicamento.append(Medicamento(nombre,precio,descripcion,cantidad))
 
     #mostrar datos
-    def obtener_paciente(self):
-        return json.dumps([ob.__dict__ for ob in self.paciente])
         
     def obtener_usuario(self):
         return json.dumps([ob.__dict__ for ob in self.usuario])
@@ -49,12 +46,6 @@ class control:
         return json.dumps([ob.__dict__ for ob in self.medicamento])
     
     #actualizar datos
-    def actualizar_paciente(self,user,user_nuevo,apellido,fecha,sexo,nombre,password,telefono):
-        for x in self.paciente:
-            if x.user==user:
-                self.paciente[self.paciente.index(x)]=Paciente(nombre,apellido,fecha,sexo,user_nuevo,password,telefono)
-                return True
-        return False 
 
     def actualizar_doctor(self,user,user_nuevo,apellido,fecha,sexo,nombre,password,especialidad,telefono):
         for x in self.doctor:
@@ -78,12 +69,6 @@ class control:
         return False 
 
     #elilminar datos
-    def eliminar_paciente(self,user):
-        for x in self.paciente:
-            if x.user==user:
-                self.paciente.remove(x)
-                return True
-        return False 
 
     def eliminar_doctor(self,user):
         for x in self.doctor:
@@ -112,12 +97,6 @@ class control:
             if x.password==password and x.user==user:
                 return json.dumps(x.__dict__)
         return '{"nombre":"false"}'
-
-    def iniciar_sesionP(self,user,password):
-        for x in self.paciente:
-            if x.password==password and x.user==user:
-                return json.dumps(x.__dict__)
-        return '{"nombre":"false"}' 
     
     def iniciar_sesionD(self,user,password):
         for x in self.doctor:
@@ -132,13 +111,6 @@ class control:
         return '{"nombre":"false"}' 
 
     #carga masiva
-    def cargamasiva(self,data):
-        hola = re.split('\n',data)
-        i=1
-        while i < len(hola):
-            texto = re.split(',',hola[i])
-            self.crearPaciente(texto[0],texto[1],texto[2],texto[3],texto[4],texto[5],texto[6])
-            i = i+1 
     
     def cargamasivaD(self,data):
         hola = re.split('\n',data)
