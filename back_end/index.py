@@ -4,6 +4,7 @@ from flask import Flask,request,jsonify
 from flask_cors import CORS
 from control import control
 from paciente import Paciente
+from cita import Cita
 import json,re
 
 #Crear la app
@@ -16,14 +17,22 @@ CORS(app)
 control=control()
 
 paciente=[]
+cita=[]
 
 #Registro Paciente
 def crearPaciente(nombre,apellido,fecha,sexo,user,password,telefono):
     paciente.append(Paciente(nombre,apellido,fecha,sexo,user,password,telefono))
 
+#Solicitud de cita
+def crearCita(user,fecha,hora,motivo,estado):
+    cita.append(Cita(user,fecha,hora,motivo,estado))
+
 #mostrar datos
 def obtener_paciente():
     return json.dumps([ob.__dict__ for ob in paciente])
+
+def obtener_cita():
+    return json.dumps([ob.__dict__ for ob in cita])
 
 #actualizar datos
 def actualizar_paciente(user,user_nuevo,apellido,fecha,sexo,nombre,password,telefono):
@@ -33,11 +42,25 @@ def actualizar_paciente(user,user_nuevo,apellido,fecha,sexo,nombre,password,tele
             return True
     return False 
 
+def actualizar_cita(user,user_nuevo,fecha,hora,motivo,estado):
+    for x in cita:
+        if x.user==user:
+            cita[cita.index(x)]=Cita(user_nuevo,fecha,hora,motivo,estado)
+            return True
+    return False 
+
 #elilminar datos
 def eliminar_paciente(user):
     for x in paciente:
         if x.user==user:
             paciente.remove(x)
+            return True
+    return False 
+
+def eliminar_cita(user):
+    for x in cita:
+        if x.user==user:
+            cita.remove(x)
             return True
     return False 
 
@@ -70,6 +93,10 @@ def obtenerusuarios():
 @app.route('/obtenerpaciente')
 def obtenerpaciente():
     return obtener_paciente()
+
+@app.route('/obtenercita')
+def obtenercita():
+    return obtener_cita()
 
 @app.route('/obtenerdoctor')
 def obtenerdoctor():
@@ -113,6 +140,13 @@ def eliminarmedicamento(nombre):
 def actualizarpaciente(user):
     dato=request.json
     if actualizar_paciente(user,dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['telefono']):
+        return '{"data":"Actualizado"}'
+    return '{"data":"Error"}'
+
+@app.route('/cita/<user>',methods=['PUT'])
+def actualizarcita(user):
+    dato=request.json
+    if actualizar_cita(user,dato['user'],dato['fecha'],dato['hora'],dato['motivo'],dato['estado']):
         return '{"data":"Actualizado"}'
     return '{"data":"Error"}'
 
@@ -164,6 +198,13 @@ def registrar():
     crearPaciente(dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['telefono'])
     return '{"data":"Creado"}'
 
+#registro de citas
+@app.route('/registroC',methods=['POST'])
+def registrarC():
+    dato=request.json
+    crearCita(dato['user'],dato['fecha'],dato['hora'],dato['motivo'],dato['estado'])
+    return '{"data":"Creado"}'
+
 #carga masiva
 @app.route('/carga',methods=['POST'])
 def carga():
@@ -192,7 +233,7 @@ def cargaM():
 
 #
 @app.route('/Info', methods=['POST'])
-def ObtenerPersona():
+def ObtenerPaciente():
     global paciente
     user = request.json['user']
     for us in paciente:

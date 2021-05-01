@@ -22,7 +22,6 @@ function info (){
        }).then(res => res.json())
        .catch(err => {
        console.error('Error:', err)
-       alert("Ocurrio un error, ver la consola")
        })
        .then(response =>{
        console.log(response)
@@ -32,6 +31,10 @@ function info (){
 
        var a = document.querySelector('#ape')
        a.value = response.apellido
+
+        //usuario a modificar
+        var mu = document.querySelector('#muss')
+        mu.value = response.user
 
        var nf = document.querySelector('#nomf')
        nf.value = response.nombre
@@ -53,12 +56,6 @@ function info (){
 
        var t = document.querySelector('#tel')
        t.value = response.telefono
-
-
-       //usuario a modificar
-       var mu = document.querySelector('#muss')
-       mu.value = response.user
-
 
        })  
 }
@@ -124,5 +121,68 @@ function modificarPaciente(){
     .catch(error => {
       console.error('Error:', error);
     });
-  
+}
+
+
+function CrearCita(){
+  var user = document.getElementById("muss");
+  var fecha = document.getElementById("fechaC");
+  var hora = document.getElementById("hora");
+  var motivo = document.getElementById("motivo");
+  var estado = document.getElementById("estado");
+
+  if(user.value==''){
+      alert('Debe llenar todos los campos')
+      return
   }
+  if(hora.value==''){
+      alert('Debe llenar todos los campos')
+      return
+  }
+  else if(motivo.value==''){
+      alert('Debe llenar todos los campos')
+      return
+  }
+  else if(fecha.value==''){
+      alert('Debe llenar todos los campos')
+      return
+  }
+  else if(estado.value==''){
+      alert('Debe llenar todos los campos')
+      return
+  }
+
+
+  fetch('http://localhost:5050/registroC',
+  {
+      method:'POST',
+      headers,
+      body: `{
+              "user":"${user.value}",
+              "fecha":"${fecha.value}",
+              "hora":"${hora.value}",
+              "motivo":"${motivo.value}",
+              "estado":"${estado.value}"
+              }`
+  })
+  .then(response => response.json())
+  .then(
+      result => {
+          console.log('Success:', result);
+          fecha.value=''
+          hora.value=''
+          motivo.value=''
+          alert('Se ha enviado su cita')
+        }
+  )
+  .catch(
+      error => {
+          console.error('Error:', error);
+          fecha.value=''
+          hora.value=''
+          motivo.value=''
+          alert('Hubo un error creando la cita')
+        }
+  )
+
+}
