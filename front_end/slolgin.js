@@ -38,6 +38,7 @@ function iniciarsesion(){
                                     alert('Credenciales incorrectas')
                                 }else{
                                     alert(`Bienvenido ${data.nombre}`)
+                                    sessionStorage.setItem("usuario",username)
                                     window.location.href='../front_end/enfermera/index.html'
                                 }
                             })
@@ -46,6 +47,7 @@ function iniciarsesion(){
 
                         }else{
                             alert(`Bienvenido ${data.nombre}`)
+                            sessionStorage.setItem("usuario",username)
                             window.location.href='../front_end/doctor/index.html'
                         }
                     })

@@ -4,7 +4,11 @@ from flask import Flask,request,jsonify
 from flask_cors import CORS
 from control import control
 from paciente import Paciente
+from doctor import Doctor
+from enfermera import Enfermera
+from medicamento import Medicamento
 from cita import Cita
+from aceptada import Aceptada
 import json,re
 
 #Crear la app
@@ -18,6 +22,8 @@ control=control()
 
 paciente=[]
 cita=[]
+aceptada=[]
+enfermera=[]
 
 #Registro Paciente
 def crearPaciente(nombre,apellido,fecha,sexo,user,password,telefono):
@@ -27,12 +33,19 @@ def crearPaciente(nombre,apellido,fecha,sexo,user,password,telefono):
 def crearCita(user,fecha,hora,motivo,estado):
     cita.append(Cita(user,fecha,hora,motivo,estado))
 
+#Crear enfermera
+def crearEnfermera(nombre,apellido,fecha,sexo,user,password,telefono):
+    enfermera.append(Enfermera(nombre,apellido,fecha,sexo,user,password,telefono))
+
 #mostrar datos
 def obtener_paciente():
     return json.dumps([ob.__dict__ for ob in paciente])
 
 def obtener_cita():
     return json.dumps([ob.__dict__ for ob in cita])
+
+def obtener_enfermera():
+    return json.dumps([ob.__dict__ for ob in enfermera])
 
 #actualizar datos
 def actualizar_paciente(user,user_nuevo,apellido,fecha,sexo,nombre,password,telefono):
@@ -46,6 +59,13 @@ def actualizar_cita(user,user_nuevo,fecha,hora,motivo,estado):
     for x in cita:
         if x.user==user:
             cita[cita.index(x)]=Cita(user_nuevo,fecha,hora,motivo,estado)
+            return True
+    return False 
+
+def actualizar_enfermera(user,user_nuevo,apellido,fecha,sexo,nombre,password,telefono):
+    for x in enfermera:
+        if x.user==user:
+            enfermera[enfermera.index(x)]=Enfermera(nombre,apellido,fecha,sexo,user_nuevo,password,telefono)
             return True
     return False 
 
@@ -64,9 +84,22 @@ def eliminar_cita(user):
             return True
     return False 
 
+def eliminar_enfermera(user):
+    for x in enfermera:
+        if x.user==user:
+            enfermera.remove(x)
+            return True
+    return False 
+
 #login
 def iniciar_sesionP(user,password):
     for x in paciente:
+        if x.password==password and x.user==user:
+            return json.dumps(x.__dict__)
+    return '{"nombre":"false"}' 
+
+def iniciar_sesionE(user,password):
+    for x in enfermera:
         if x.password==password and x.user==user:
             return json.dumps(x.__dict__)
     return '{"nombre":"false"}' 
@@ -80,7 +113,13 @@ def cargamasiva(data):
         crearPaciente(texto[0],texto[1],texto[2],texto[3],texto[4],texto[5],texto[6])
         i = i+1 
 
-
+def cargamasivaE(data):
+    hola = re.split('\n',data)
+    i=1
+    while i < len(hola):
+        texto = re.split(',',hola[i])
+        crearEnfermera(texto[0],texto[1],texto[2],texto[3],texto[4],texto[5],texto[6])
+        i = i+1 
 
 
 
@@ -104,7 +143,7 @@ def obtenerdoctor():
 
 @app.route('/obtenerenfermera')
 def obtenerenfermera():
-    return control.obtener_enfermera()
+    return obtener_enfermera()
 
 @app.route('/obtenermedicamento')
 def obtenermedicamento():
@@ -125,7 +164,7 @@ def eliminardoctor(user):
 
 @app.route('/enfermera/<user>',methods=['DELETE'])
 def eliminarenfermera(user):
-    if(control.eliminar_enfermera(user)):
+    if(eliminar_enfermera(user)):
         return '{"data":"Eliminado"}'
     return '{"data":"Error"}'
 
@@ -160,7 +199,7 @@ def actualizardoctor(user):
 @app.route('/enfermera/<user>',methods=['PUT'])
 def actualizarenfermera(user):
     dato=request.json
-    if control.actualizar_enfermera(user,dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['telefono']):
+    if actualizar_enfermera(user,dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['telefono']):
         return '{"data":"Actualizado"}'
     return '{"data":"Error"}'
 
@@ -190,7 +229,7 @@ def loginD(user,password):
 @app.route('/loginE/<user>/<password>')
 def loginE(user,password):
     print('entra enfermera')
-    return control.iniciar_sesionE(user,password)
+    return iniciar_sesionE(user,password)
 
 @app.route('/registro',methods=['POST'])
 def registrar():
@@ -221,7 +260,7 @@ def cargaD():
 @app.route('/cargaE',methods=['POST'])
 def cargaE():
     dato = request.json
-    control.cargamasivaE(dato['data'])
+    cargamasivaE(dato['data'])
     return '{"data":"Cargados"}'
 
 @app.route('/cargaM',methods=['POST'])
@@ -231,7 +270,7 @@ def cargaM():
     return '{"data":"Cargados"}'
 
 
-#
+#informacion de 1 usuario especifico
 @app.route('/Info', methods=['POST'])
 def ObtenerPaciente():
     global paciente
@@ -251,7 +290,60 @@ def ObtenerPaciente():
     respuesta = jsonify(Dato)
     return(respuesta)    
     
+@app.route('/InfoE', methods=['POST'])
+def ObtenerEnfermera():
+    global enfermera
+    user = request.json['user']
+    for us in enfermera:
+        if us.getUser() == user:
+            Dato = {
+                'nombre':us.getNombre(), 
+                'apellido':us.getApellido(), 
+                'fecha':us.getFecha(), 
+                'sexo':us.getSexo(), 
+                'user':us.getUser(),
+                'password':us.getPassword(),
+                'telefono':us.getTelefono()
+                }
+            break
+    respuesta = jsonify(Dato)
+    return(respuesta)   
 
+#Aceptar cita
+@app.route('/AceptarCita', methods=['POST','DELETE'])
+def AceptarCita():
+    global cita, aceptada
+    pos = int(request.json['pos'])
+    user = cita[pos].getUser()
+    fecha= cita[pos].getFecha()
+    hora = cita[pos].getHora()
+    motivo = cita[pos].getMotivo()
+    estado = cita[pos].getEstado()
+    aceptada.append(Aceptada(user,fecha,hora,motivo,estado))
+    Dato = {
+             'message':'Success',
+             'reason': 'La cita ha sido aceptada'  
+            }
+    del cita[pos]
+    respuesta = jsonify(Dato)
+    return (respuesta)
+
+#Mostrar citas aceptadas
+@app.route('/aceptada', methods= ['GET'])
+def obtenerAceptada():
+    global aceptada
+    Datos = []
+    for us in aceptada:
+        Dato = { 
+            'user':us.getUser(),
+            'fecha':us.getFecha(), 
+            'hora':us.getHora(), 
+            'motivo':us.getMotivo(),
+            'estado':us.getEstado()
+         }
+        Datos.append(Dato)
+    respuesta = jsonify(Datos)
+    return(respuesta)
 
 #INICIAR EL SERVIDOR
 

@@ -1,5 +1,4 @@
 from usuario import Usuario
-from paciente import Paciente
 from doctor import Doctor
 from enfermera import Enfermera
 from medicamento import Medicamento
@@ -12,7 +11,7 @@ class control:
         self.usuario=[]
         
         self.doctor=[]
-        self.enfermera=[]
+        
         self.medicamento=[]
 
         self.usuario.append(Usuario('Javier','Golon','admin','1234'))
@@ -23,9 +22,7 @@ class control:
     def crearDoctor(self,nombre,apellido,fecha,sexo,user,password,especialidad,telefono):
         self.doctor.append(Doctor(nombre,apellido,fecha,sexo,user,password,especialidad,telefono))
 
-    #Crear enfermera
-    def crearEnfermera(self,nombre,apellido,fecha,sexo,user,password,telefono):
-        self.enfermera.append(Enfermera(nombre,apellido,fecha,sexo,user,password,telefono))
+    
     
     #Crear medicamento
     def crearMedicamento(self,nombre,precio,descripcion,cantidad):
@@ -39,8 +36,7 @@ class control:
     def obtener_doctor(self):
         return json.dumps([ob.__dict__ for ob in self.doctor])
 
-    def obtener_enfermera(self):
-        return json.dumps([ob.__dict__ for ob in self.enfermera])
+    
     
     def obtener_medicamento(self):
         return json.dumps([ob.__dict__ for ob in self.medicamento])
@@ -54,12 +50,7 @@ class control:
                 return True
         return False 
 
-    def actualizar_enfermera(self,user,user_nuevo,apellido,fecha,sexo,nombre,password,telefono):
-        for x in self.enfermera:
-            if x.user==user:
-                self.enfermera[self.enfermera.index(x)]=Enfermera(nombre,apellido,fecha,sexo,user_nuevo,password,telefono)
-                return True
-        return False 
+
     
     def actualizar_medicamento(self,nombre,nombre_nuevo,precio,descripcion,cantidad):
         for x in self.medicamento:
@@ -77,12 +68,7 @@ class control:
                 return True
         return False 
 
-    def eliminar_enfermera(self,user):
-        for x in self.enfermera:
-            if x.user==user:
-                self.enfermera.remove(x)
-                return True
-        return False 
+
 
     def eliminar_medicamento(self,nombre):
         for x in self.medicamento:
@@ -104,11 +90,7 @@ class control:
                 return json.dumps(x.__dict__)
         return '{"nombre":"false"}' 
     
-    def iniciar_sesionE(self,user,password):
-        for x in self.enfermera:
-            if x.password==password and x.user==user:
-                return json.dumps(x.__dict__)
-        return '{"nombre":"false"}' 
+
 
     #carga masiva
     
@@ -120,13 +102,7 @@ class control:
             self.crearDoctor(texto[0],texto[1],texto[2],texto[3],texto[4],texto[5],texto[6],texto[7])
             i = i+1 
 
-    def cargamasivaE(self,data):
-        hola = re.split('\n',data)
-        i=1
-        while i < len(hola):
-            texto = re.split(',',hola[i])
-            self.crearEnfermera(texto[0],texto[1],texto[2],texto[3],texto[4],texto[5],texto[6])
-            i = i+1 
+
     
     def cargamasivaM(self,data):
         hola = re.split('\n',data)
