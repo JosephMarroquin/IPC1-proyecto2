@@ -29,6 +29,7 @@ rechazada=[]
 enfermera=[]
 medicamento=[]
 carrito=[]
+doctor=[]
 
 #Registro Paciente
 def crearPaciente(nombre,apellido,fecha,sexo,user,password,telefono):
@@ -50,6 +51,10 @@ def crearMedicamento(nombre,precio,descripcion,cantidad):
 def crearCarro(nombre,precio,descripcion,cantidad):
     carrito.append(Carrito(nombre,precio,descripcion,cantidad))
 
+#Crear doctor
+def crearDoctor(nombre,apellido,fecha,sexo,user,password,especialidad,telefono):
+    doctor.append(Doctor(nombre,apellido,fecha,sexo,user,password,especialidad,telefono))
+
 #mostrar datos
 def obtener_paciente():
     return json.dumps([ob.__dict__ for ob in paciente])
@@ -65,6 +70,18 @@ def obtener_medicamento():
 
 def obtener_carro():
     return json.dumps([ob.__dict__ for ob in carrito])
+
+def obtener_doctor():
+    return json.dumps([ob.__dict__ for ob in doctor])
+
+#actualizar datos
+
+def actualizar_doctor(user,user_nuevo,apellido,fecha,sexo,nombre,password,especialidad,telefono):
+    for x in doctor:
+        if x.user==user:
+            doctor[doctor.index(x)]=Doctor(nombre,apellido,fecha,sexo,user_nuevo,password,especialidad,telefono)
+            return True
+    return False 
 
 #actualizar datos
 def actualizar_paciente(user,user_nuevo,apellido,fecha,sexo,nombre,password,telefono):
@@ -124,6 +141,13 @@ def eliminar_medicamento(nombre):
             return True
     return False 
 
+def eliminar_doctor(user):
+    for x in doctor:
+        if x.user==user:
+            doctor.remove(x)
+            return True
+    return False 
+
 #login
 def iniciar_sesionP(user,password):
     for x in paciente:
@@ -133,6 +157,12 @@ def iniciar_sesionP(user,password):
 
 def iniciar_sesionE(user,password):
     for x in enfermera:
+        if x.password==password and x.user==user:
+            return json.dumps(x.__dict__)
+    return '{"nombre":"false"}' 
+
+def iniciar_sesionD(user,password):
+    for x in doctor:
         if x.password==password and x.user==user:
             return json.dumps(x.__dict__)
     return '{"nombre":"false"}' 
@@ -162,6 +192,15 @@ def cargamasivaM(data):
         crearMedicamento(texto[0],texto[1],texto[2],texto[3])
         i = i+1 
 
+def cargamasivaD(data):
+    hola = re.split('\n',data)
+    i=1
+    while i < len(hola):
+        texto = re.split(',',hola[i])
+        crearDoctor(texto[0],texto[1],texto[2],texto[3],texto[4],texto[5],texto[6],texto[7])
+        i = i+1 
+
+
 #EndPoints
 
 @app.route('/obtenerusuarios')
@@ -178,7 +217,7 @@ def obtenercita():
 
 @app.route('/obtenerdoctor')
 def obtenerdoctor():
-    return control.obtener_doctor()
+    return obtener_doctor()
 
 @app.route('/obtenerenfermera')
 def obtenerenfermera():
@@ -197,7 +236,7 @@ def eliminarpaciente(user):
 
 @app.route('/doctor/<user>',methods=['DELETE'])
 def eliminardoctor(user):
-    if(control.eliminar_doctor(user)):
+    if(eliminar_doctor(user)):
         return '{"data":"Eliminado"}'
     return '{"data":"Error"}'
 
@@ -231,7 +270,7 @@ def actualizarcita(user):
 @app.route('/doctor/<user>',methods=['PUT'])
 def actualizardoctor(user):
     dato=request.json
-    if control.actualizar_doctor(user,dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['especialidad'],dato['telefono']):
+    if actualizar_doctor(user,dato['nombre'],dato['apellido'],dato['fecha'],dato['sexo'],dato['user'],dato['password'],dato['especialidad'],dato['telefono']):
         return '{"data":"Actualizado"}'
     return '{"data":"Error"}'
 
@@ -263,7 +302,7 @@ def loginP(user,password):
 @app.route('/loginD/<user>/<password>')
 def loginD(user,password):
     print('entra doctor')
-    return control.iniciar_sesionD(user,password)
+    return iniciar_sesionD(user,password)
 
 @app.route('/loginE/<user>/<password>')
 def loginE(user,password):
@@ -293,7 +332,7 @@ def carga():
 @app.route('/cargaD',methods=['POST'])
 def cargaD():
     dato = request.json
-    control.cargamasivaD(dato['data'])
+    cargamasivaD(dato['data'])
     return '{"data":"Cargados"}'
 
 @app.route('/cargaE',methods=['POST'])
@@ -342,6 +381,26 @@ def ObtenerEnfermera():
                 'sexo':us.getSexo(), 
                 'user':us.getUser(),
                 'password':us.getPassword(),
+                'telefono':us.getTelefono()
+                }
+            break
+    respuesta = jsonify(Dato)
+    return(respuesta)   
+
+@app.route('/InfoD', methods=['POST'])
+def ObtenerDoctor():
+    global doctor
+    user = request.json['user']
+    for us in doctor:
+        if us.getUser() == user:
+            Dato = {
+                'nombre':us.getNombre(), 
+                'apellido':us.getApellido(), 
+                'fecha':us.getFecha(), 
+                'sexo':us.getSexo(), 
+                'user':us.getUser(),
+                'password':us.getPassword(),
+                'especialidad':us.getEspecialidad(),
                 'telefono':us.getTelefono()
                 }
             break

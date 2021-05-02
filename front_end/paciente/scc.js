@@ -258,7 +258,7 @@ fetch('http://localhost:5050/obtenermedicamento')
                     <p class="card-text">Precio: <input type="button"  id="precio" value="${data[w].precio}" style="display: none">${data[w].precio}</p>
                     <p class="card-text">Descripcion: <input type="button"  id="descripcion" value="${data[w].descripcion}" style="display: none">${data[w].descripcion}</p>
                     <p class="card-text">Cantidad: <input type="button"  id="cantidad" value="" style="display: none">${data[w].cantidad}</p>
-                    <button class="btn btn btn-success" onclick="Agregar()">Agregar</button>
+                    <button class="btn btn btn-success" onclick="Agregar(this)">Agregar</button>
                 </div>
                 </div>
                 </div>
