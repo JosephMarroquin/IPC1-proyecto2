@@ -236,3 +236,36 @@ function MostrarAceptada(){
      }
     })
 }
+
+function generatePDF(){
+    let fecha = document.getElementById("ff");
+    let nombre = document.getElementById("np");
+    let padecimiento = document.getElementById("pd");
+    let descripcion = document.getElementById("des");
+
+    if(fecha.value==''){
+        alert('Debe llenar todos los campos')
+        return
+    }
+    else if(nombre.value==''){
+        alert('Debe llenar todos los campos')
+        return
+    }
+    else if(padecimiento.value==''){
+        alert('Debe llenar todos los campos')
+        return
+    }
+    else if(descripcion.value==''){
+        alert('Debe llenar todos los campos')
+        return
+    }
+
+    const element=document.getElementById("receta");
+    html2pdf().from(element).set({
+          margin: 1,
+          filename: 'receta medica.pdf',
+          html2canvas: { scale: 2 },
+          jsPDF: {orientation: 'portrait', unit: 'in', format: 'letter', compressPDF: true}
+        })
+    .save();
+}
