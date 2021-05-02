@@ -1,10 +1,10 @@
-class Aceptada:
+class Rechazada:
     def __init__(self,user,fecha,hora,motivo,estado):
         self.user=user
         self.fecha=fecha
         self.hora=hora
         self.motivo=motivo
-        self.estado='Aceptada'
+        self.estado='Rechazada'
     
     def getUser(self):
         return self.user

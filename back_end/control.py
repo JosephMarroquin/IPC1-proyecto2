@@ -12,7 +12,7 @@ class control:
         
         self.doctor=[]
         
-        self.medicamento=[]
+        
 
         self.usuario.append(Usuario('Javier','Golon','admin','1234'))
         
@@ -24,9 +24,7 @@ class control:
 
     
     
-    #Crear medicamento
-    def crearMedicamento(self,nombre,precio,descripcion,cantidad):
-        self.medicamento.append(Medicamento(nombre,precio,descripcion,cantidad))
+    
 
     #mostrar datos
         
@@ -38,8 +36,7 @@ class control:
 
     
     
-    def obtener_medicamento(self):
-        return json.dumps([ob.__dict__ for ob in self.medicamento])
+    
     
     #actualizar datos
 
@@ -52,12 +49,7 @@ class control:
 
 
     
-    def actualizar_medicamento(self,nombre,nombre_nuevo,precio,descripcion,cantidad):
-        for x in self.medicamento:
-            if x.nombre==nombre:
-                self.medicamento[self.medicamento.index(x)]=Medicamento(nombre_nuevo,precio,descripcion,cantidad)
-                return True
-        return False 
+    
 
     #elilminar datos
 
@@ -70,12 +62,7 @@ class control:
 
 
 
-    def eliminar_medicamento(self,nombre):
-        for x in self.medicamento:
-            if x.nombre==nombre:
-                self.medicamento.remove(x)
-                return True
-        return False 
+    
 
     #login
     def iniciar_sesion(self,user,password):
@@ -104,10 +91,4 @@ class control:
 
 
     
-    def cargamasivaM(self,data):
-        hola = re.split('\n',data)
-        i=1
-        while i < len(hola):
-            texto = re.split(',',hola[i])
-            self.crearMedicamento(texto[0],texto[1],texto[2],texto[3])
-            i = i+1 
+    

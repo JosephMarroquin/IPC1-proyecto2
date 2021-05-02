@@ -129,7 +129,6 @@ function CargarSol(){
    fetch('http://localhost:5050/obtenercita').then(res => res.json())
    .catch(err => {
    console.error('Error:', err)
-   alert("Ocurrio un error, ver la consola")
    })
    .then(response =>{
    console.log(response)
@@ -165,7 +164,6 @@ function Aceptar(boton){
         }).then(res => res.json())
         .catch(err => {
         console.error('Error:', err)
-        alert("Ocurrio un error, ver la consola")
         })
         .then(response =>{
             console.log(response);
@@ -177,13 +175,40 @@ function Aceptar(boton){
                location.href="visualizar_pendiente.html"
             }
            }) 
+}
+
+function Rechazar(boton){     
+    var pos = boton.value  
+    var objeto = {
+        'pos': pos
     }
+    console.log(objeto)
+    fetch('http://localhost:5050/RechazarCita', {
+        method: 'POST', 
+        body: JSON.stringify(objeto), 
+        headers:{
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json())
+    .catch(err => {
+        console.error('Error:', err)
+    })
+    .then(response =>{
+        console.log(response);
+        console.log(response.message)
+        if(response.message == "Failed"){
+            alert(response.reason)
+        }else{
+            alert(response.reason)
+            location.href="visualizar_pendiente.html"
+        }
+    }) 
+}
 
 function MostrarAceptada(){
     fetch('http://localhost:5050/aceptada').then(res => res.json())
     .catch(err => {
         console.error('Error:', err)
-        alert("Ocurrio un error, ver la consola")
     })
     .then(response =>{
     console.log(response)

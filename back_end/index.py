@@ -9,6 +9,8 @@ from enfermera import Enfermera
 from medicamento import Medicamento
 from cita import Cita
 from aceptada import Aceptada
+from rechazada import Rechazada
+from carrito import Carrito
 import json,re
 
 #Crear la app
@@ -23,7 +25,10 @@ control=control()
 paciente=[]
 cita=[]
 aceptada=[]
+rechazada=[]
 enfermera=[]
+medicamento=[]
+carrito=[]
 
 #Registro Paciente
 def crearPaciente(nombre,apellido,fecha,sexo,user,password,telefono):
@@ -37,6 +42,14 @@ def crearCita(user,fecha,hora,motivo,estado):
 def crearEnfermera(nombre,apellido,fecha,sexo,user,password,telefono):
     enfermera.append(Enfermera(nombre,apellido,fecha,sexo,user,password,telefono))
 
+#Crear medicamento
+def crearMedicamento(nombre,precio,descripcion,cantidad):
+    medicamento.append(Medicamento(nombre,precio,descripcion,cantidad))
+
+#Crear carro
+def crearCarro(nombre,precio,descripcion,cantidad):
+    carrito.append(Carrito(nombre,precio,descripcion,cantidad))
+
 #mostrar datos
 def obtener_paciente():
     return json.dumps([ob.__dict__ for ob in paciente])
@@ -46,6 +59,12 @@ def obtener_cita():
 
 def obtener_enfermera():
     return json.dumps([ob.__dict__ for ob in enfermera])
+
+def obtener_medicamento():
+    return json.dumps([ob.__dict__ for ob in medicamento])
+
+def obtener_carro():
+    return json.dumps([ob.__dict__ for ob in carrito])
 
 #actualizar datos
 def actualizar_paciente(user,user_nuevo,apellido,fecha,sexo,nombre,password,telefono):
@@ -69,6 +88,13 @@ def actualizar_enfermera(user,user_nuevo,apellido,fecha,sexo,nombre,password,tel
             return True
     return False 
 
+def actualizar_medicamento(nombre,nombre_nuevo,precio,descripcion,cantidad):
+    for x in medicamento:
+        if x.nombre==nombre:
+            medicamento[medicamento.index(x)]=Medicamento(nombre_nuevo,precio,descripcion,cantidad)
+            return True
+    return False 
+
 #elilminar datos
 def eliminar_paciente(user):
     for x in paciente:
@@ -88,6 +114,13 @@ def eliminar_enfermera(user):
     for x in enfermera:
         if x.user==user:
             enfermera.remove(x)
+            return True
+    return False 
+
+def eliminar_medicamento(nombre):
+    for x in medicamento:
+        if x.nombre==nombre:
+            medicamento.remove(x)
             return True
     return False 
 
@@ -121,7 +154,13 @@ def cargamasivaE(data):
         crearEnfermera(texto[0],texto[1],texto[2],texto[3],texto[4],texto[5],texto[6])
         i = i+1 
 
-
+def cargamasivaM(data):
+    hola = re.split('\n',data)
+    i=1
+    while i < len(hola):
+        texto = re.split(',',hola[i])
+        crearMedicamento(texto[0],texto[1],texto[2],texto[3])
+        i = i+1 
 
 #EndPoints
 
@@ -147,7 +186,7 @@ def obtenerenfermera():
 
 @app.route('/obtenermedicamento')
 def obtenermedicamento():
-    return control.obtener_medicamento()
+    return obtener_medicamento()
 
 #Eliminar datos
 @app.route('/paciente/<user>',methods=['DELETE'])
@@ -170,7 +209,7 @@ def eliminarenfermera(user):
 
 @app.route('/medicamento/<nombre>',methods=['DELETE'])
 def eliminarmedicamento(nombre):
-    if(control.eliminar_medicamento(nombre)):
+    if(eliminar_medicamento(nombre)):
         return '{"data":"Eliminado"}'
     return '{"data":"Error"}'
 
@@ -206,7 +245,7 @@ def actualizarenfermera(user):
 @app.route('/medicamento/<nombre>',methods=['PUT'])
 def actualizarmedicamento(nombre):
     dato=request.json
-    if control.actualizar_medicamento(nombre,dato['nombre'],dato['precio'],dato['descripcion'],dato['cantidad']):
+    if actualizar_medicamento(nombre,dato['nombre'],dato['precio'],dato['descripcion'],dato['cantidad']):
         return '{"data":"Actualizado"}'
     return '{"data":"Error"}'
 
@@ -266,7 +305,7 @@ def cargaE():
 @app.route('/cargaM',methods=['POST'])
 def cargaM():
     dato = request.json
-    control.cargamasivaM(dato['data'])
+    cargamasivaM(dato['data'])
     return '{"data":"Cargados"}'
 
 
@@ -309,6 +348,41 @@ def ObtenerEnfermera():
     respuesta = jsonify(Dato)
     return(respuesta)   
 
+#estado de la cita
+@app.route('/InfoA', methods=['POST'])
+def ObtenerCitaA():
+    global aceptada
+    user = request.json['user']
+    for us in aceptada:
+        if us.getUser() == user:
+            Dato = {
+                'user':us.getUser(), 
+                'fecha':us.getFecha(), 
+                'hora':us.getHora(), 
+                'motivo':us.getMotivo(), 
+                'estado':us.getEstado()
+                }
+            break
+    respuesta = jsonify(Dato)
+    return(respuesta)   
+
+@app.route('/InfoR', methods=['POST'])
+def ObtenerCitaR():
+    global rechazada
+    user = request.json['user']
+    for us in rechazada:
+        if us.getUser() == user:
+            Dato = {
+                'user':us.getUser(), 
+                'fecha':us.getFecha(), 
+                'hora':us.getHora(), 
+                'motivo':us.getMotivo(), 
+                'estado':us.getEstado()
+                }
+            break
+    respuesta = jsonify(Dato)
+    return(respuesta)   
+
 #Aceptar cita
 @app.route('/AceptarCita', methods=['POST','DELETE'])
 def AceptarCita():
@@ -323,6 +397,25 @@ def AceptarCita():
     Dato = {
              'message':'Success',
              'reason': 'La cita ha sido aceptada'  
+            }
+    del cita[pos]
+    respuesta = jsonify(Dato)
+    return (respuesta)
+
+#Rechazar cita
+@app.route('/RechazarCita', methods=['POST','DELETE'])
+def RechazarCita():
+    global cita, rechazada
+    pos = int(request.json['pos'])
+    user = cita[pos].getUser()
+    fecha= cita[pos].getFecha()
+    hora = cita[pos].getHora()
+    motivo = cita[pos].getMotivo()
+    estado = cita[pos].getEstado()
+    rechazada.append(Rechazada(user,fecha,hora,motivo,estado))
+    Dato = {
+             'message':'Success',
+             'reason': 'La cita ha sido rechazada'  
             }
     del cita[pos]
     respuesta = jsonify(Dato)
@@ -344,6 +437,33 @@ def obtenerAceptada():
         Datos.append(Dato)
     respuesta = jsonify(Datos)
     return(respuesta)
+
+@app.route('/rechazada', methods= ['GET'])
+def obtenerRechazada():
+    global rechazada
+    Datos = []
+    for us in rechazada:
+        Dato = { 
+            'user':us.getUser(),
+            'fecha':us.getFecha(), 
+            'hora':us.getHora(), 
+            'motivo':us.getMotivo(),
+            'estado':us.getEstado()
+         }
+        Datos.append(Dato)
+    respuesta = jsonify(Datos)
+    return(respuesta)
+
+#Agregar al carrito
+@app.route('/agregaCarro', methods=['POST'])
+def agregaCarro():
+    dato=request.json
+    crearCarro(dato['nombre'],dato['precio'],dato['descripcion'],dato['cantidad'])
+    return '{"data":"Creado"}'
+
+@app.route('/carritoO')
+def obtenercarro():
+    return obtener_carro()
 
 #INICIAR EL SERVIDOR
 
