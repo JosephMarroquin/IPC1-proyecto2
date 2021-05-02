@@ -227,3 +227,61 @@ function MostrarAceptada(){
      }
     })
 }
+
+let tex1="";
+fetch('http://localhost:5050/obtenerdoctor')
+.then(response => response.json())
+.then(data =>{
+    var j;
+    tex1+= `<br>
+        <select class="editperfil">
+        <option></option>
+        </select>
+                <br>`
+    for(j=0;j<data.length;j++){
+        tex1+= `<br>
+        <select class="editperfil">
+        <option>${data[j].nombre}</option>
+        </select>
+                <br>`
+        console.log(data[j].nombre,'prueba')
+    }
+    document.getElementById("sdoc").innerHTML = tex1;
+});
+
+function pdf(){
+    let fecha = document.getElementById("fec");
+    let paciente = document.getElementById("pac");
+    let doctor = document.getElementById("sdoc");
+    let pconsulta = document.getElementById("pcon");
+    let total = document.getElementById("tot");
+
+    if(fecha.value==''){
+        alert('Debe llenar todos los campos')
+        return
+    }
+    else if(paciente.value==''){
+        alert('Debe llenar todos los campos')
+        return
+    }
+    else if(doctor.value==''){
+        alert('Debe llenar todos los campos')
+        return
+    }
+    else if(pconsulta.value==''){
+        alert('Debe llenar todos los campos')
+        return
+    }
+    else if(total.value==''){
+        alert('Debe llenar todos los campos')
+        return
+    }
+    const element=document.getElementById("factura");
+    html2pdf().from(element).set({
+          margin: 1,
+          filename: 'factura.pdf',
+          html2canvas: { scale: 2 },
+          jsPDF: {orientation: 'portrait', unit: 'in', format: 'letter', compressPDF: true}
+        })
+    .save();
+}
