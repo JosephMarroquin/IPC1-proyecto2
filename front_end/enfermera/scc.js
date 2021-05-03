@@ -13,7 +13,7 @@ function info (){
       }
       
        console.log(objeto)
-       fetch('http://localhost:5050/InfoE', {
+       fetch('http://35.225.67.35:5050/InfoE', {
        method: 'POST', 
        body: JSON.stringify(objeto), 
        headers:{
@@ -108,7 +108,7 @@ function modificarEnfermera(){
       "telefono":"${ntel.value}"
     }`
   
-    fetch('http://localhost:5050/enfermera/'+muser.value, {
+    fetch('http://35.225.67.35:5050/enfermera/'+muser.value, {
       method: 'PUT',
       headers,
       body: reque,
@@ -126,7 +126,7 @@ function modificarEnfermera(){
 
 //citas pendientes
 function CargarSol(){
-   fetch('http://localhost:5050/obtenercita').then(res => res.json())
+   fetch('http://35.225.67.35:5050/obtenercita').then(res => res.json())
    .catch(err => {
    console.error('Error:', err)
    })
@@ -155,7 +155,7 @@ function Aceptar(boton){
             'pos': pos
         }
         console.log(objeto)
-        fetch('http://localhost:5050/AceptarCita', {
+        fetch('http://35.225.67.35:5050/AceptarCita', {
             method: 'POST', 
             body: JSON.stringify(objeto), 
             headers:{
@@ -183,7 +183,7 @@ function Rechazar(boton){
         'pos': pos
     }
     console.log(objeto)
-    fetch('http://localhost:5050/RechazarCita', {
+    fetch('http://35.225.67.35:5050/RechazarCita', {
         method: 'POST', 
         body: JSON.stringify(objeto), 
         headers:{
@@ -206,7 +206,7 @@ function Rechazar(boton){
 }
 
 function MostrarAceptada(){
-    fetch('http://localhost:5050/aceptada').then(res => res.json())
+    fetch('http://35.225.67.35:5050/aceptada').then(res => res.json())
     .catch(err => {
         console.error('Error:', err)
     })
@@ -229,7 +229,7 @@ function MostrarAceptada(){
 }
 
 let tex1="";
-fetch('http://localhost:5050/obtenerdoctor')
+fetch('http://35.225.67.35:5050/obtenerdoctor')
 .then(response => response.json())
 .then(data =>{
     var j;

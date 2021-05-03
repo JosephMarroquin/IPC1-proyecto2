@@ -12,25 +12,25 @@ function iniciarsesion(){
     var username = document.querySelector('#user').value
     var pass = document.querySelector('#pass').value
 
-    fetch(`http://localhost:5050/login/${usuario.value}/${password.value}`)
+    fetch(`http://35.225.67.35:5050/login/${usuario.value}/${password.value}`)
     .then(response => response.json())
     .then(data => {
         console.log(data.nombre)
         if(data.nombre=="false"){
 
-            fetch(`http://localhost:5050/loginP/${usuario.value}/${password.value}`)
+            fetch(`http://35.225.67.35:5050/loginP/${usuario.value}/${password.value}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data.nombre)
                 if(data.nombre=="false"){
                     
-                    fetch(`http://localhost:5050/loginD/${usuario.value}/${password.value}`)
+                    fetch(`http://35.225.67.35:5050/loginD/${usuario.value}/${password.value}`)
                     .then(response => response.json())
                     .then(data => {
                         console.log(data.nombre)
                         if(data.nombre=="false"){
                             
-                            fetch(`http://localhost:5050/loginE/${usuario.value}/${password.value}`)
+                            fetch(`http://35.225.67.35:5050/loginE/${usuario.value}/${password.value}`)
                             .then(response => response.json())
                             .then(data => {
                                 console.log(data.nombre)

@@ -7,7 +7,7 @@ headers.append('GET', 'POST', 'OPTIONS','PUT','DELETE');
 
 
 let text="";
-fetch('http://localhost:5050/obtenerpaciente')
+fetch('http://35.225.67.35:5050/obtenerpaciente')
 .then(response => response.json())
 .then(data =>{
     var i;
@@ -35,7 +35,7 @@ fetch('http://localhost:5050/obtenerpaciente')
 });
 
 let tex1="";
-fetch('http://localhost:5050/obtenerdoctor')
+fetch('http://35.225.67.35:5050/obtenerdoctor')
 .then(response => response.json())
 .then(data =>{
     var j;
@@ -64,7 +64,7 @@ fetch('http://localhost:5050/obtenerdoctor')
 });
 
 let tex2="";
-fetch('http://localhost:5050/obtenerenfermera')
+fetch('http://35.225.67.35:5050/obtenerenfermera')
 .then(response => response.json())
 .then(data =>{
     var y;
@@ -92,7 +92,7 @@ fetch('http://localhost:5050/obtenerenfermera')
 });
 
 let tex3="";
-fetch('http://localhost:5050/obtenermedicamento')
+fetch('http://35.225.67.35:5050/obtenermedicamento')
 .then(response => response.json())
 .then(data =>{
     var w;
@@ -120,7 +120,7 @@ fetch('http://localhost:5050/obtenermedicamento')
 function refrescarVista(){
     document.getElementById("tarjetaPaciente").innerHTML = '';
     let text="";
-    fetch('http://localhost:5050/obtenerpaciente')
+    fetch('http://35.225.67.35:5050/obtenerpaciente')
     .then(response => response.json())
     .then(data =>{
         var i;
@@ -153,7 +153,7 @@ function refrescarVista(){
 function refrescarVistaD(){
     document.getElementById("tarjetaDoctor").innerHTML = '';
     let text="";
-    fetch('http://localhost:5050/obtenerdoctor')
+    fetch('http://35.225.67.35:5050/obtenerdoctor')
     .then(response => response.json())
     .then(data =>{
         var i;
@@ -187,7 +187,7 @@ function refrescarVistaD(){
 function refrescarVistaE(){
     document.getElementById("tarjetaEnfermera").innerHTML = '';
     let text="";
-    fetch('http://localhost:5050/obtenerenfermera')
+    fetch('http://35.225.67.35:5050/obtenerenfermera')
     .then(response => response.json())
     .then(data =>{
         var i;
@@ -220,7 +220,7 @@ function refrescarVistaE(){
   function refrescarVistaM(){
     document.getElementById("tarjetaMedicamento").innerHTML = '';
     let text="";
-    fetch('http://localhost:5050/obtenermedicamento')
+    fetch('http://35.225.67.35:5050/obtenermedicamento')
     .then(response => response.json())
     .then(data =>{
         var i;
@@ -250,7 +250,7 @@ function refrescarVistaE(){
 //eliminar datos paciente
 function eliminar(user){
     console.log(user)
-    fetch('http://localhost:5050/paciente/'+user,{
+    fetch('http://35.225.67.35:5050/paciente/'+user,{
         method:'DELETE'
     })
     .then(res => res.text())
@@ -262,7 +262,7 @@ function eliminar(user){
 
 function eliminarD(user){
     console.log(user)
-    fetch('http://localhost:5050/doctor/'+user,{
+    fetch('http://35.225.67.35:5050/doctor/'+user,{
         method:'DELETE'
     })
     .then(res => res.text())
@@ -274,7 +274,7 @@ function eliminarD(user){
 
 function eliminarE(user){
     console.log(user)
-    fetch('http://localhost:5050/enfermera/'+user,{
+    fetch('http://35.225.67.35:5050/enfermera/'+user,{
         method:'DELETE'
     })
     .then(res => res.text())
@@ -286,7 +286,7 @@ function eliminarE(user){
 
 function eliminarM(nombre){
     console.log(nombre)
-    fetch('http://localhost:5050/medicamento/'+nombre,{
+    fetch('http://35.225.67.35:5050/medicamento/'+nombre,{
         method:'DELETE'
     })
     .then(res => res.text())
@@ -308,7 +308,7 @@ function cargar(){
             }
 
             console.log(JSON.stringify(cuerpo))
-            fetch('http://localhost:5050/carga', {
+            fetch('http://35.225.67.35:5050/carga', {
             method: 'POST',
             headers,
             body: JSON.stringify(cuerpo),
@@ -342,7 +342,7 @@ function cargarD(){
             }
 
             console.log(JSON.stringify(cuerpo))
-            fetch('http://localhost:5050/cargaD', {
+            fetch('http://35.225.67.35:5050/cargaD', {
             method: 'POST',
             headers,
             body: JSON.stringify(cuerpo),
@@ -377,7 +377,7 @@ function cargarE(){
             }
 
             console.log(JSON.stringify(cuerpo))
-            fetch('http://localhost:5050/cargaE', {
+            fetch('http://35.225.67.35:5050/cargaE', {
             method: 'POST',
             headers,
             body: JSON.stringify(cuerpo),
@@ -411,7 +411,7 @@ function cargarM(){
             }
 
             console.log(JSON.stringify(cuerpo))
-            fetch('http://localhost:5050/cargaM', {
+            fetch('http://35.225.67.35:5050/cargaM', {
             method: 'POST',
             headers,
             body: JSON.stringify(cuerpo),
@@ -482,7 +482,7 @@ function modificarPaciente(){
       "telefono":"${ntel.value}"
     }`
   
-    fetch('http://localhost:5050/paciente/'+muser.value, {
+    fetch('http://35.225.67.35:5050/paciente/'+muser.value, {
       method: 'PUT',
       headers,
       body: reque,
@@ -562,7 +562,7 @@ function modificarDoctor(){
       "telefono":"${ntelD.value}"
     }`
   
-    fetch('http://localhost:5050/doctor/'+muserD.value, {
+    fetch('http://35.225.67.35:5050/doctor/'+muserD.value, {
       method: 'PUT',
       headers,
       body: reque,
@@ -638,7 +638,7 @@ function modificarEnfermera(){
       "telefono":"${ntelE.value}"
     }`
   
-    fetch('http://localhost:5050/enfermera/'+muserE.value, {
+    fetch('http://35.225.67.35:5050/enfermera/'+muserE.value, {
       method: 'PUT',
       headers,
       body: reque,
@@ -697,7 +697,7 @@ function modificarEnfermera(){
       "cantidad":"${ncantidadM.value}"
     }`
   
-    fetch('http://localhost:5050/medicamento/'+mnombreM.value, {
+    fetch('http://35.225.67.35:5050/medicamento/'+mnombreM.value, {
       method: 'PUT',
       headers,
       body: reque,
@@ -738,7 +738,7 @@ text2 = `<table class="table" style="margin=10px">
 </thead>
 <tbody>`
 
-fetch('http://localhost:5050/obtenerpaciente')
+fetch('http://35.225.67.35:5050/obtenerpaciente')
 .then(response => response.json())
 .then(data =>{
     var i;
@@ -779,7 +779,7 @@ text3 = `<table class="table" style="margin=10px">
 </thead>
 <tbody>`
 
-fetch('http://localhost:5050/obtenerdoctor')
+fetch('http://35.225.67.35:5050/obtenerdoctor')
 .then(response => response.json())
 .then(data =>{
     var i;
@@ -819,7 +819,7 @@ text4 = `<table class="table" style="margin=10px">
 </thead>
 <tbody>`
 
-fetch('http://localhost:5050/obtenerenfermera')
+fetch('http://35.225.67.35:5050/obtenerenfermera')
 .then(response => response.json())
 .then(data =>{
     var i;
@@ -855,7 +855,7 @@ text5 = `<table class="table" style="margin=10px">
 </thead>
 <tbody>`
 
-fetch('http://localhost:5050/obtenermedicamento')
+fetch('http://35.225.67.35:5050/obtenermedicamento')
 .then(response => response.json())
 .then(data =>{
     var i;

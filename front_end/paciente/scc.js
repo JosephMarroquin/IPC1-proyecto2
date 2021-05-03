@@ -13,7 +13,7 @@ function info (){
       }
       
        console.log(objeto)
-       fetch('http://localhost:5050/Info', {
+       fetch('http://35.225.67.35:5050/Info', {
        method: 'POST', 
        body: JSON.stringify(objeto), 
        headers:{
@@ -108,7 +108,7 @@ function modificarPaciente(){
       "telefono":"${ntel.value}"
     }`
   
-    fetch('http://localhost:5050/paciente/'+muser.value, {
+    fetch('http://35.225.67.35:5050/paciente/'+muser.value, {
       method: 'PUT',
       headers,
       body: reque,
@@ -153,7 +153,7 @@ function CrearCita(){
   }
 
 
-  fetch('http://localhost:5050/registroC',
+  fetch('http://35.225.67.35:5050/registroC',
   {
       method:'POST',
       headers,
@@ -196,7 +196,7 @@ function infoA (){
          }
          
           console.log(objeto)
-          fetch('http://localhost:5050/InfoA', {
+          fetch('http://35.225.67.35:5050/InfoA', {
           method: 'POST', 
           body: JSON.stringify(objeto), 
           headers:{
@@ -223,7 +223,7 @@ function infoR (){
          }
          
           console.log(objeto)
-          fetch('http://localhost:5050/InfoR', {
+          fetch('http://35.225.67.35:5050/InfoR', {
           method: 'POST', 
           body: JSON.stringify(objeto), 
           headers:{
@@ -244,7 +244,7 @@ function infoR (){
 
 //carrito de compras
 let tex3="";
-fetch('http://localhost:5050/obtenermedicamento')
+fetch('http://35.225.67.35:5050/obtenermedicamento')
 .then(response => response.json())
 .then(data =>{
     var w;
@@ -276,7 +276,7 @@ function Agregar(){
     var descripcion = document.getElementById("descripcion")
     var cantidad = document.getElementById("cantidad")
 
-    fetch('http://localhost:5050/agregaCarro',
+    fetch('http://35.225.67.35:5050/agregaCarro',
     {
         method:'POST',
         headers,
@@ -316,7 +316,7 @@ text5 = `<table class="table" style="margin=10px">
 </thead>
 <tbody>`
 
-fetch('http://localhost:5050/carritoO')
+fetch('http://35.225.67.35:5050/carritoO')
 .then(response => response.json())
 .then(data =>{
     var i;

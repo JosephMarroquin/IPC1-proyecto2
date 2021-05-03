@@ -31,7 +31,7 @@ function CrearUsuario(){
         alert('Debe llenar todos los campos')
         return
     }
-    fetch('http://localhost:5050/registro',
+    fetch('http://35.225.67.35:5050/registro',
     {
         method:'POST',
         headers,
