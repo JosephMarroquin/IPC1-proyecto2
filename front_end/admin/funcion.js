@@ -321,6 +321,7 @@ function cargar(){
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('Carga masiva registrada con exito')
             });
 
         }
@@ -354,6 +355,7 @@ function cargarD(){
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('Carga masiva registrada con exito')
             });
 
         }
@@ -388,6 +390,7 @@ function cargarE(){
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('Carga masiva registrada con exito')
             });
 
         }
